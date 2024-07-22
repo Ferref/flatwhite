@@ -1,7 +1,7 @@
 # flatwhite/format_validator.py
 import re 
 
-def validate_email(email):
+def validate_email(email) -> bool:
     valid_email_status = False
 
     valid_email_pattern = r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,7}\b'
@@ -10,7 +10,7 @@ def validate_email(email):
         valid_email_status = True
         return valid_email_status
     
-def validate_phone(phone):
+def validate_phone(phone) -> bool:
     validate_phone_status = False
 
     extract_numbers = r'\d+'
