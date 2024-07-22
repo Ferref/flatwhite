@@ -38,7 +38,7 @@ def validate_age(age, cleaning=False):
             return age
     return False
 
-def correct_name(name, cleaning=False):
+def validate_name(name, cleaning=False):
     name = name.strip()
     name_parts = name.split()
     
