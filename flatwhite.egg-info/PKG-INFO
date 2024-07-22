@@ -1,0 +1,21 @@
+Metadata-Version: 2.1
+Name: flatwhite
+Version: 0.1.0
+Summary: A package for validating formats and handling files.
+Home-page: https://github.com/Ferref/flatwhite
+Author: Ferenc Kovács
+Author-email: kovacsferenc026@gmail.com
+License: MIT
+Description-Content-Type: text/markdown
+License-File: LICENSE
+
+# Flatwhite
+
+A package for validating formats and handling files.
+
+## Installation
+
+You can install the package using pip:
+
+```bash
+pip install flatwhite
