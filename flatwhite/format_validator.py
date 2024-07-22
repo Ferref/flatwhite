@@ -2,16 +2,15 @@
 import re 
 
 def validate_email(email) -> bool:
-    valid_email_status = False
 
     valid_email_pattern = r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,7}\b'
 
     if re.fullmatch(valid_email_pattern, email):
-        valid_email_status = True
-        return valid_email_status
+        return True
+    else:
+        return False
     
 def validate_phone(phone) -> bool:
-    validate_phone_status = False
 
     extract_numbers = r'\d+'
 
@@ -21,9 +20,11 @@ def validate_phone(phone) -> bool:
     correct_phone_number_length = 10
 
     if len(numbers_from_phone) == correct_phone_number_length:
-        validate_phone_status = True
+        return True
+    else:
+        return False
         
-    return validate_phone_status
+
 
 
 
