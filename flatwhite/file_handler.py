@@ -21,16 +21,44 @@ doc_extensions = [
 
 ### Functions
 def get_file_names(file_path):
+    """
+    Get the list of file names in the specified directory.
+
+    Parameters:
+    file_path (str): The path of the directory.
+
+    Returns:
+    list: List of file names in the directory.
+    """
     return os.listdir(file_path)
 
 def path_exists(file_path, if_not_exists_create=False):
+    """
+    Check if a path exists and optionally create it if it does not.
+
+    Parameters:
+    file_path (str): The path to check.
+    if_not_exists_create (bool): If True, create the path if it does not exist (default: False).
+
+    Returns:
+    bool: True if the path exists or was created, False otherwise.
+    """
     exists = os.path.exists(file_path)
     if not exists and if_not_exists_create:
-        os.makedirs(file_path)  # Changed to create directories
+        os.makedirs(file_path)
         return True
     return exists
 
 def organize_files(file_path, pics=False, sounds=False, docs=False):
+    """
+    Organize files in the specified directory into subdirectories based on file type.
+
+    Parameters:
+    file_path (str): The path of the directory to organize.
+    pics (bool): If True, move picture files to the 'Pictures' subdirectory (default: False).
+    sounds (bool): If True, move sound files to the 'Sounds' subdirectory (default: False).
+    docs (bool): If True, move document files to the 'Documents' subdirectory (default: False).
+    """
     # Define directory names
     pics_dir = os.path.join(file_path, 'Pictures')
     sounds_dir = os.path.join(file_path, 'Sounds')
@@ -66,6 +94,19 @@ def organize_files(file_path, pics=False, sounds=False, docs=False):
                 shutil.move(source_file, os.path.join(docs_dir, filename))
 
 def delete_files(file_path, pics=False, sounds=False, docs=False, additional_extensions=''):
+    """
+    Delete files in the specified directory based on the provided criteria.
+
+    Parameters:
+    file_path (str): The path of the directory where files need to be deleted.
+    pics (bool): If True, delete picture files (default: False).
+    sounds (bool): If True, delete sound files (default: False).
+    docs (bool): If True, delete document files (default: False).
+    additional_extensions (str): A comma-separated string of additional file extensions to delete.
+
+    Returns:
+    None
+    """
     if not os.path.exists(file_path):
         print(f'{file_path} does not exist!')
         return
@@ -111,9 +152,13 @@ def delete_files(file_path, pics=False, sounds=False, docs=False, additional_ext
     except Exception as e:
         print(f'An unexpected error occurred: {e}')
 
-def generate_folders(**folders):
+def generate_folders(base_path, folders):
     """
     Generates nested folders based on the provided dictionary structure.
+
+    Parameters:
+    base_path (str): The base directory path where folders need to be created.
+    folders (dict): A dictionary representing the folder structure.
 
     Example:
         folders = {
@@ -123,19 +168,16 @@ def generate_folders(**folders):
             },
             'audiobooks': {}
         }
-        generate_folders(base_path, **folders)
+        generate_folders(base_path, folders)
     """
-    def create_subfolders(base_path, subfolders):
-        for folder_name, subfolder_structure in subfolders.items():
-            folder_path = os.path.join(base_path, folder_name)
-            if not os.path.exists(folder_path):
-                os.makedirs(folder_path)
-            if isinstance(subfolder_structure, dict):
-                create_subfolders(folder_path, subfolder_structure)
-
-    create_subfolders(os.getcwd(), folders)
+    for folder_name, subfolder_structure in folders.items():
+        folder_path = os.path.join(base_path, folder_name)
+        if not os.path.exists(folder_path):
+            os.makedirs(folder_path)
+        if isinstance(subfolder_structure, dict):
+            generate_folders(folder_path, subfolder_structure)
 
 # Example usage:
 # organize_files('/path/to/directory', pics=True, sounds=True, docs=True)
 # delete_files('/path/to/directory', pics=True, additional_extensions='.tmp,.log')
-# generate_folders(books={'fantasy': {}, 'crime': {}}, audiobooks={})
+# generate_folders('/base/path', {'books': {'fantasy': {}, 'crime': {}}, 'audiobooks': {}})
