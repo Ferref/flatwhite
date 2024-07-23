@@ -1,25 +1,23 @@
-# flatwhite/file_handler.py
 import os
 import shutil
 
 # Define file extensions for each category
-pic_exentions = [
-    '.jpg', '.jpeg', '.png', '.gif', '.bmp', '.tiff', '.tif', '.svg', 
-    '.ico', '.webp', '.heic', '.raw', '.nef', '.cr2', '.orf', '.sr2', 
+pic_extensions = [
+    '.jpg', '.jpeg', '.png', '.gif', '.bmp', '.tiff', '.tif', '.svg',
+    '.ico', '.webp', '.heic', '.raw', '.nef', '.cr2', '.orf', '.sr2',
     '.arw', '.pef', '.dng', '.raf', '.rw2'
 ]
 sound_extensions = [
-    '.mp3', '.wav', '.ogg', '.flac', '.aac', '.m4a', '.wma', '.aiff', 
-    '.alac', '.amr', '.au', '.mid', '.midi', '.opus', '.ra', '.voc', 
+    '.mp3', '.wav', '.ogg', '.flac', '.aac', '.m4a', '.wma', '.aiff',
+    '.alac', '.amr', '.au', '.mid', '.midi', '.opus', '.ra', '.voc',
     '.vox'
 ]
 doc_extensions = [
-    '.pdf', '.doc', '.docx', '.txt', '.xls', '.xlsx', '.ppt', '.pptx', 
-    '.odt', '.ods', '.odp', '.rtf', '.tex', '.wpd', '.md', '.html', 
-    '.htm', '.xml', '.csv', '.tsv', '.log', '.epub', '.mobi', '.azw3', 
+    '.pdf', '.doc', '.docx', '.txt', '.xls', '.xlsx', '.ppt', '.pptx',
+    '.odt', '.ods', '.odp', '.rtf', '.tex', '.wpd', '.md', '.html',
+    '.htm', '.xml', '.csv', '.tsv', '.log', '.epub', '.mobi', '.azw3',
     '.fb2', '.djvu'
 ]
-
 
 ### Functions
 def get_file_names(file_path):
@@ -57,33 +55,30 @@ def organize_files(file_path, pics=False, sounds=False, docs=False):
             continue
 
         # Move files to the correct directories
-        if pics and file_ext in pic_exentions:
-            shutil.move(source_file, pics_dir)
+        if pics and file_ext in pic_extensions:
+            shutil.move(source_file, os.path.join(pics_dir, filename))
         elif sounds and file_ext in sound_extensions:
-            shutil.move(source_file, sounds_dir)
+            shutil.move(source_file, os.path.join(sounds_dir, filename))
         elif docs and file_ext in doc_extensions:
-            shutil.move(source_file, docs_dir)
+            shutil.move(source_file, os.path.join(docs_dir, filename))
         else:
             if docs:
-                shutil.move(source_file, docs_dir)
+                shutil.move(source_file, os.path.join(docs_dir, filename))
 
 def delete_files(file_path, pics=False, sounds=False, docs=False, additional_extensions=''):
-    exists = os.path.exists(file_path)
-    isdir = os.path.isdir(file_path)
-
-    if not exists:
-        print(f'{file_path} does not exists!')
+    if not os.path.exists(file_path):
+        print(f'{file_path} does not exist!')
         return
-    if not isdir:
+    if not os.path.isdir(file_path):
         print(f'Error: {file_path} is not a directory!')
+        return
 
     try:
-        additional_extensions = [extension for extension in additional_extensions]
-
+        additional_extensions = [ext.strip() for ext in additional_extensions.split(',') if ext.strip()]
         extensions_to_delete = []
 
         if pics:
-            extensions_to_delete.extend(pic_exentions)
+            extensions_to_delete.extend(pic_extensions)
         if sounds:
             extensions_to_delete.extend(sound_extensions)
         if docs:
@@ -93,14 +88,13 @@ def delete_files(file_path, pics=False, sounds=False, docs=False, additional_ext
 
         if not extensions_to_delete:
             print('No criteria given!')
+            return
 
         files_deleted = False
-
         files_in_dir = os.listdir(file_path)
 
         for file in files_in_dir:
-            file_extension = os.path.splitext(file)[1]
-
+            file_extension = os.path.splitext(file)[1].lower()
             if file_extension in extensions_to_delete:
                 file_to_delete = os.path.join(file_path, file)
                 os.remove(file_to_delete)
@@ -113,14 +107,35 @@ def delete_files(file_path, pics=False, sounds=False, docs=False, additional_ext
     except PermissionError as e:
         print(f'Permission error: {e}')
     except FileNotFoundError as e:
-        print('File not found error: {e}')
+        print(f'File not found error: {e}')
     except Exception as e:
-        print(f'An unexpected error occored: {e}')
+        print(f'An unexpected error occurred: {e}')
 
+def generate_folders(**folders):
+    """
+    Generates nested folders based on the provided dictionary structure.
 
+    Example:
+        folders = {
+            'books': {
+                'fantasy': {},
+                'crime': {}
+            },
+            'audiobooks': {}
+        }
+        generate_folders(base_path, **folders)
+    """
+    def create_subfolders(base_path, subfolders):
+        for folder_name, subfolder_structure in subfolders.items():
+            folder_path = os.path.join(base_path, folder_name)
+            if not os.path.exists(folder_path):
+                os.makedirs(folder_path)
+            if isinstance(subfolder_structure, dict):
+                create_subfolders(folder_path, subfolder_structure)
 
-        
+    create_subfolders(os.getcwd(), folders)
 
-
-
-
+# Example usage:
+# organize_files('/path/to/directory', pics=True, sounds=True, docs=True)
+# delete_files('/path/to/directory', pics=True, additional_extensions='.tmp,.log')
+# generate_folders(books={'fantasy': {}, 'crime': {}}, audiobooks={})
