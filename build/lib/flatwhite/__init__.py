@@ -2,3 +2,4 @@
 
 from .format_validator import *
 from .file_handler import *
+from .web_scraper import *

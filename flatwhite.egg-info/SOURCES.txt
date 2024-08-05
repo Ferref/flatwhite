@@ -6,6 +6,8 @@ setup.py
 flatwhite/__init__.py
 flatwhite/file_handler.py
 flatwhite/format_validator.py
+flatwhite/templates.py
+flatwhite/web_scraper.py
 flatwhite.egg-info/PKG-INFO
 flatwhite.egg-info/SOURCES.txt
 flatwhite.egg-info/dependency_links.txt
