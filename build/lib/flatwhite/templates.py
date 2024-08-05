@@ -58,16 +58,19 @@ def create_project_structure(project_type='web', includes=None, templates='creat
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteRule ^ index.html [QSA,L]"""
         
-        # Create the folders
+        # Create the folders if they don't exist
         for folder in folders:
             os.makedirs(folder, exist_ok=True)
         
-        # Create the files
+        # Create the files if they don't exist
         for file_path, content in files.items():
-            with open(file_path, 'w') as file:
-                file.write(content)
+            if not os.path.exists(file_path):
+                with open(file_path, 'w') as file:
+                    file.write(content)
         
         print("Web project folder structure created successfully.")
     else:
         print(f"Project type '{project_type}' is not supported.")
 
+# Example usage
+create_project_structure('web', includes=['html', 'js', 'css', 'php', 'sql'], templates='boilerplate')
