@@ -11,6 +11,7 @@ flatwhite/web_scraper.py
 flatwhite.egg-info/PKG-INFO
 flatwhite.egg-info/SOURCES.txt
 flatwhite.egg-info/dependency_links.txt
+flatwhite.egg-info/requires.txt
 flatwhite.egg-info/top_level.txt
 tests/__init__.py
 tests/test_file_handler.py
