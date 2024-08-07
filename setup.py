@@ -1,13 +1,16 @@
-# setup.py
-
 from setuptools import setup, find_packages
 
 setup(
     name='flatwhite',
-    version='0.3.6',
+    version='0.3.7',
     packages=find_packages(),
     install_requires=[
-        # List your dependencies here
+        'requests',  # for web scraping
+        're',  # for regex validation (built-in module, so this line is optional)
+        'smtplib',  # for sending emails (built-in module, so this line is optional)
+        'datetime',  # for date and time handling (built-in module, so this line is optional)
+        'os',  # for file and directory handling (built-in module, so this line is optional)
+        'shutil',  # for file operations (built-in module, so this line is optional)
     ],
     entry_points={
         'console_scripts': [
